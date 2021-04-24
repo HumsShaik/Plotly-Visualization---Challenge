@@ -40,7 +40,7 @@ function drawCharts(sampleId) {
 		
 		Plotly.newPlot("bar", barArray, barLayout);
 
-        // create the trace for the bubble chart
+        // create the bubble chart
         var bubbleData = {
             x: samples.otu_ids,
             y: samples.sample_values,
@@ -52,6 +52,20 @@ function drawCharts(sampleId) {
             text: samples.otu_labels
 
         };
+
+        // set the layout for the bubble plot
+        var layout = {
+            xaxis:{title: "OTU ID"},
+            height: 600,
+            width: 1300
+        };
+
+        // create the data variable 
+        var data1 = [bubbleData];
+
+        // create the bubble plot
+        Plotly.newPlot("bubble", data1, layout); 
+
 
 
 
