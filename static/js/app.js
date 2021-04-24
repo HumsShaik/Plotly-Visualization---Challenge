@@ -12,7 +12,8 @@ function drawCharts(sampleId) {
         var samples = data.samples;
         console.log(samples);
 
-		var resultArray = samples.filter(s => s.id == sampleId);
+		var resultArray = samples.filter(s => s.id.toString() == sampleId);
+        
         console.log(resultArray);
 
 		var result = resultArray[0];
@@ -40,15 +41,25 @@ function drawCharts(sampleId) {
 		
 		var barLayout = {
 			title: "Top 10 Bacteria Cultures Found",
-			margin: {t: 30, l: 150}
+			margin: {
+                t: 30, 
+                l: 150,
+                r: 30,
+                b: 30
+            
+            }
 		}
 		
 		Plotly.newPlot("bar", barArray, barLayout);
 
         // create the bubble chart
+
+        //var samples_bubble = data.samples_bubble.filter(s => s.id.toString() === id)[0];
+
+
         var bubbleData = {
-            x: samples.otu_ids,
-            y: samples.sample_values,
+            x: result.otu_ids,
+            y: result.sample_values,
             mode: "markers",
             marker: {
                 size: samples.sample_values,
@@ -71,7 +82,7 @@ function drawCharts(sampleId) {
         // create the bubble plot
         Plotly.newPlot("bubble", data_bubble, layout_bubble); 
 
-         // The guage chart
+         // create guage chart
   
          var data_guage = [
             {
