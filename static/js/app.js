@@ -1,6 +1,12 @@
 console.log("app.js loaded");
 
+function drawCharts(id) {
 
+
+
+
+
+}
 
 function init() {
      // select dropdown menu 
