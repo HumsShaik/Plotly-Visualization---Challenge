@@ -40,6 +40,22 @@ function drawCharts(sampleId) {
 		
 		Plotly.newPlot("bar", barArray, barLayout);
 
+        // create the trace for the bubble chart
+        var bubbleData = {
+            x: samples.otu_ids,
+            y: samples.sample_values,
+            mode: "markers",
+            marker: {
+                size: samples.sample_values,
+                color: samples.otu_ids
+            },
+            text: samples.otu_labels
+
+        };
+
+
+
+
     });
 
 
