@@ -1,5 +1,7 @@
 console.log("app.js loaded");
 
+// the code in these files is based on Dom's office hours
+
 function drawCharts(sampleId) {
 
     // get the data from the json file
@@ -81,7 +83,7 @@ function drawCharts(sampleId) {
 
          // create guage chart
   
-         var data_guage = [
+         var guageData = [
             {
             domain: { x: [0, 1], y: [0, 1] },
             value: parseFloat(w_freq),
@@ -101,13 +103,15 @@ function drawCharts(sampleId) {
             }
           ];
           var guageLayout = { 
-              width: 700, 
+              width: 600, 
               height: 600, 
               margin: { t: 20, b: 40, l:100, r:100 } 
             };
 
 
-          Plotly.newPlot("gauge", data_guage, guageLayout);
+          Plotly.newPlot("gauge", guageData, guageLayout);
+
+          
 
 
 
