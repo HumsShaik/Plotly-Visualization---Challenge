@@ -6,7 +6,12 @@ function drawCharts(sampleId) {
     d3.json("data/samples.json").then((data)=> {
         console.log(data)
 
+        var w_freq = data.metadata.map(d => d.w_freq)
+        console.log(` Washing Frequency : ${w_freq}`)
+
         var samples = data.samples;
+        console.log(samples);
+
 		var resultArray = samples.filter(s => s.id == sampleId);
         console.log(resultArray);
 
@@ -54,17 +59,47 @@ function drawCharts(sampleId) {
         };
 
         // set the layout for the bubble plot
-        var layout = {
+        var layout_bubble = {
             xaxis:{title: "OTU ID"},
             height: 600,
             width: 1300
         };
 
         // create the data variable 
-        var data1 = [bubbleData];
+        var data_bubble = [bubbleData];
 
         // create the bubble plot
-        Plotly.newPlot("bubble", data1, layout); 
+        Plotly.newPlot("bubble", data_bubble, layout_bubble); 
+
+         // The guage chart
+  
+         var data_guage = [
+            {
+            domain: { x: [0, 1], y: [0, 1] },
+            value: parseFloat(w_freq),
+            title: { text: `Weekly Washing Frequency ` },
+            type: "indicator",
+            
+            mode: "gauge+number",
+            gauge: { axis: { range: [null, 9] },
+                     steps: [
+                      { range: [0, 2], color: "grey" },
+                      { range: [2, 4], color: "red" },
+                      { range: [4, 6], color: "yellow" },
+                      { range: [6, 8], color: "blue" },
+                      { range: [8, 9], color: "green" },
+                    ]}
+                
+            }
+          ];
+          var layout_guage = { 
+              width: 700, 
+              height: 600, 
+              margin: { t: 20, b: 40, l:100, r:100 } 
+            };
+
+
+          Plotly.newPlot("gauge", data_guage, layout_guage);
 
 
 
