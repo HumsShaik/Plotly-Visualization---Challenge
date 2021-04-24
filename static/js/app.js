@@ -54,23 +54,20 @@ function drawCharts(sampleId) {
 
         // create the bubble chart
 
-        //var samples_bubble = data.samples_bubble.filter(s => s.id.toString() === id)[0];
-
-
         var bubbleData = {
             x: result.otu_ids,
             y: result.sample_values,
             mode: "markers",
             marker: {
-                size: samples.sample_values,
-                color: samples.otu_ids
+                size: result.sample_values,
+                color: result.otu_ids
             },
-            text: samples.otu_labels
+            text: result.otu_labels
 
         };
 
         // set the layout for the bubble plot
-        var layout_bubble = {
+        var bubbleLayout = {
             xaxis:{title: "OTU ID"},
             height: 600,
             width: 1300
@@ -80,7 +77,7 @@ function drawCharts(sampleId) {
         var data_bubble = [bubbleData];
 
         // create the bubble plot
-        Plotly.newPlot("bubble", data_bubble, layout_bubble); 
+        Plotly.newPlot("bubble", data_bubble, bubbleLayout); 
 
          // create guage chart
   
@@ -103,14 +100,14 @@ function drawCharts(sampleId) {
                 
             }
           ];
-          var layout_guage = { 
+          var guageLayout = { 
               width: 700, 
               height: 600, 
               margin: { t: 20, b: 40, l:100, r:100 } 
             };
 
 
-          Plotly.newPlot("gauge", data_guage, layout_guage);
+          Plotly.newPlot("gauge", data_guage, guageLayout);
 
 
 
