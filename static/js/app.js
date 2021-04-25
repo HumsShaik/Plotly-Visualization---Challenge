@@ -1,6 +1,8 @@
 console.log("app.js loaded");
 
-// the code in these files is based on Dom's office hours
+// *********************************************************
+//  The code in these files is based on Dom's office hours
+// *********************************************************
 
 function drawCharts(sampleId) {
 
@@ -13,9 +15,9 @@ function drawCharts(sampleId) {
 
         var samples = data.samples;
         console.log(samples);
-
-		var resultArray = samples.filter(s => s.id.toString() == sampleId);
         
+        //filtering sample values by id
+		var resultArray = samples.filter(s => s.id.toString() == sampleId);
         console.log(resultArray);
 
 		var result = resultArray[0];
@@ -32,6 +34,10 @@ function drawCharts(sampleId) {
 
         yticks = otu_ids.slice(0,10).map(otu_Id => `OTU ${otu_Id}`).reverse();
 		
+        // ********************
+        //   Create Bar Chart
+        // ********************
+
 		var barData = {
 			x: sample_values.slice(0,10).reverse(),
 			y: yticks,
@@ -51,10 +57,13 @@ function drawCharts(sampleId) {
             
             }
 		}
-		
+		// create bar plot
 		Plotly.newPlot("bar", barArray, barLayout);
 
-        // create the bubble chart
+
+        // **************************
+        //  Create the Bubble Chart
+        // **************************
 
         var bubbleData = {
             x: result.otu_ids,
@@ -81,55 +90,115 @@ function drawCharts(sampleId) {
         // create the bubble plot
         Plotly.newPlot("bubble", data_bubble, bubbleLayout); 
 
-         // create guage chart
-  
-         var guageData = [
+        // *********************
+        //   Create Pie Chart 
+        // *********************
+        var pieData = {
+            labels: yticks,
+            values: sample_values,
+            type:"pie",
+          };
+          
+          var pieLayout = {
+            height: 400,
+            width: 500
+          };
+          
+          var data = [pieData];
+          
+          // create Pie Plot
+          Plotly.newPlot("pie", data, pieLayout);
+
+        // *********************************
+        //   Create Gauge Chart - Optional
+        // *********************************
+         
+        var gaugeData = [
             {
             domain: { x: [0, 1], y: [0, 1] },
             value: parseFloat(w_freq),
-            title: { text: `Weekly Washing Frequency ` },
             type: "indicator",
-            
-            mode: "gauge+number",
-            gauge: { axis: { range: [null, 9] },
+            mode: "gauge",
+            gauge: { axis: { range: [0, 9] },
                      steps: [
-                      { range: [0, 2], color: "grey" },
-                      { range: [2, 4], color: "red" },
-                      { range: [4, 6], color: "yellow" },
-                      { range: [6, 8], color: "blue" },
-                      { range: [8, 9], color: "green" },
-                    ]}
+                      { range: [0, 1], color: "purple" },
+                      { range: [1, 2], color: "red" },
+                      { range: [2, 3], color: "yellow" },
+                      { range: [3, 4], color: "blue" },
+                      { range: [4, 5], color: "pink" },
+                      { range: [5, 6], color: "grey" },
+                      { range: [6, 7], color: "orange" },
+                      { range: [7, 8], color: "lightblue" },
+                      { range: [8, 9], color: "coral" },
+                    ]
+                }
                 
             }
-          ];
-          var guageLayout = { 
-              width: 600, 
+        ];
+
+        
+        var gaugeLayout = { 
+              width: 600,
+              title: { text: `<b> Belly Button Washing Frequency</b><br><br>Scrubs per Week ` }, 
               height: 600, 
-              margin: { t: 20, b: 40, l:100, r:100 } 
-            };
+              margin: { t: 30, b: 20, l:70, r:100 } 
+              
+              
+        };
 
+        
 
-          Plotly.newPlot("gauge", guageData, guageLayout);
-
-          
-
-
-
-
-
-    });
-
-
+          // Create Gauge Plot
+        Plotly.newPlot("gauge", gaugeData, gaugeLayout);
+     
+   });
 
 }
 
 
+// **************************************
+// create the function to get metadata
+// **************************************
+
+function ShowMetadata(id) {
+        // read the json file to get data
+    d3.json("data/samples.json").then((data)=> {
+        
+        // get the metadata info 
+        var metadata = data.metadata;
+
+        console.log(metadata)
+
+        // filtering meta data info by id
+        var result = metadata.filter(meta => meta.id.toString() === id)[0];
+
+        // select demographic Info to put data
+        var demographicInfo = d3.select("#sample-metadata");
+        
+        // empty the demographic info before getting new id info
+        demographicInfo.html("");
+
+        // grab the necessary demographic data data for the id and append the info to the panel
+        Object.entries(result).forEach((key) => {   
+                demographicInfo.append("h5").text(key[0] + ": " + key[1] + "\n");    
+        });
+    });
+}
+
+
+
+// ******************************************
 // create the function for the change event
+// ******************************************
+
 function optionChanged(id) {
     drawCharts(id);
-    
+    ShowMetadata(id);
 }
 
+// ************************
+//  Create Init function
+// ************************
 
 function init() {
 
@@ -152,8 +221,7 @@ function init() {
     var id = sampleNames[0];
      // call the functions 
      drawCharts(id);
-
-
+     ShowMetadata(id);
 
     });
 
